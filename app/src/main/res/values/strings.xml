@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Vacine</string>
+    <string name="criar_perfil">Criar Perfil</string>
+    <string name="nome">Nome</string>
+    <string name="genero">Genero</string>
+    <string name="dt_nascimento">Data de Nascimento</string>
+    <string name="add">Adicionar</string>
+
+    <!-- Genero -->
+    <string name="masculino">Masculino</string>
+    <string name="feminino">Feminino</string>
+</resources>
