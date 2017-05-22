@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">Vacine</string>
-    <string name="criar_perfil">Criar Perfil</string>
-    <string name="nome">Nome</string>
-    <string name="genero">Genero</string>
-    <string name="dt_nascimento">Data de Nascimento</string>
+    <string name="create_profile">Criar Perfil</string>
+    <string name="name">Nome</string>
+    <string name="gender">Genero</string>
+    <string name="birthday_date">Data de Nascimento</string>
     <string name="add">Adicionar</string>
 
     <!-- Genero -->
-    <string name="masculino">Masculino</string>
-    <string name="feminino">Feminino</string>
+    <string name="gender_masc">Masculino</string>
+    <string name="gender_fem">Feminino</string>
+    <string name="vacina_name">Nome</string>
+    <string name="vacina_date">Data</string>
+    <string name="vacina_place">Local</string>
 </resources>
