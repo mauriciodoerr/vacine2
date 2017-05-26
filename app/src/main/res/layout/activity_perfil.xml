@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/birthday_date"
-                android:inputType="textPersonName|textCapWords"
+                android:inputType="date"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 

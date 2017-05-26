@@ -12,4 +12,6 @@
     <string name="vacina_name">Nome</string>
     <string name="vacina_date">Data</string>
     <string name="vacina_place">Local</string>
+    <string name="vacina_descricao">Descrição</string>
+    <string name="gravar">Gravar</string>
 </resources>

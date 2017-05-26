@@ -15,14 +15,16 @@ public class Vacina implements Serializable {
     private String name;
     private String date;
     private String place;
+    private String description;
 
     public Vacina() {
     }
 
-    public Vacina(String name, String date, String place) {
+    public Vacina(String name, String date, String place, String description) {
         this.name = name;
         this.date = date;
         this.place = place;
+        this.description = description;
     }
 
     public String getName() {
@@ -56,5 +58,13 @@ public class Vacina implements Serializable {
                 ", date=" + date +
                 ", place='" + place + '\'' +
                 '}';
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

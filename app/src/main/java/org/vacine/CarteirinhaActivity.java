@@ -1,5 +1,8 @@
 package org.vacine;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.view.View;
+import android.widget.TextView;
 
 import org.vacine.Util.Vacinas;
 import org.vacine.adapter.VacinaAdapter;
@@ -28,17 +33,27 @@ public class CarteirinhaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carteirinha);
 
-        //String name = getIntent().getExtras().getString("name");
+//        String name = getIntent().getExtras().getString("name");
         vacinas = Vacinas.getVacinas();
         findViews();
 //        setToolbar("Mauricio");
         setRecyclerView();
+        setActions();
     }
 
     private void findViews(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         recyclerViewVacinas = (RecyclerView) findViewById(R.id.recycler_view_vacinas);
-        facAddSong = (FloatingActionButton) findViewById(R.id.fac_add_song);
+        facAddSong = (FloatingActionButton) findViewById(R.id.fac_add_vacina);
+    }
+
+    private void setActions() {
+        facAddSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createVacina();
+            }
+        });
     }
 
     private void setRecyclerView(){
@@ -52,14 +67,37 @@ public class CarteirinhaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int position = recyclerViewVacinas.getChildLayoutPosition(view);
                 //ImageView img = (ImageView) view.findViewById(R.id.ivi_cover);
+                TextView viewTransition = (TextView) view.findViewById(R.id.text_view_vacina_name);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("vacina", vacinas.get(position));
-                //goToPlaySong(img, bundle);
+                goToVacina(viewTransition, bundle);
             }
         });
 
         recyclerViewVacinas.setAdapter(songsAdapter);
         recyclerViewVacinas.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private void goToVacina(View view, Bundle bundle){
+        Intent intent = new Intent(CarteirinhaActivity.this, VacinaActivity.class);
+        if (bundle != null) {
+            intent.putExtra("extra", bundle);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new Explode());
+            ActivityOptions opt = view != null ?
+                    ActivityOptions.makeSceneTransitionAnimation(this, view, "view") :
+                    ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(intent, opt.toBundle());
+        } else {
+            startActivity(intent);
+        }
+    }
+
+    private void createVacina(){
+        Intent intent = new Intent(CarteirinhaActivity.this, VacinaActivity.class);
+        startActivity(intent);
     }
 
     private void setToolbar(String name){
