@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 public class Vacina implements Serializable {
 
+    private Integer id;
     private String name;
     private String date;
     private String place;
@@ -20,11 +21,28 @@ public class Vacina implements Serializable {
     public Vacina() {
     }
 
-    public Vacina(String name, String date, String place, String description) {
+    public Vacina(Integer id, String name, String date, String place, String description) {
+        this.id = id;
         this.name = name;
         this.date = date;
         this.place = place;
         this.description = description;
+    }
+
+    public Vacina(String name, String date, String place, String description) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.place = place;
+        this.description = description;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

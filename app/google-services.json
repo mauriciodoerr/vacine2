@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1003763314625",
+    "firebase_url": "https://vacine-d9229.firebaseio.com",
+    "project_id": "vacine-d9229",
+    "storage_bucket": "vacine-d9229.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003763314625:android:1459620ec070f0f7",
+        "android_client_info": {
+          "package_name": "org.vacine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003763314625-nnkckq90fbltikt4uehsevivi6sgrmov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2pormQexBdsse8AkRq_4lwz3mnGY0X6k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

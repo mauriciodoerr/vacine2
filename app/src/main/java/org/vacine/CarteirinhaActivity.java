@@ -3,9 +3,9 @@ package org.vacine;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.view.View;
 import android.widget.TextView;
+
+import com.firebase.ui.database.*;
 
 import org.vacine.Util.Vacinas;
 import org.vacine.adapter.VacinaAdapter;
@@ -35,6 +37,7 @@ public class CarteirinhaActivity extends AppCompatActivity {
 
 //        String name = getIntent().getExtras().getString("name");
         vacinas = Vacinas.getVacinas();
+        Vacinas.setVacinasFirebase();
         findViews();
 //        setToolbar("Mauricio");
         setRecyclerView();
@@ -58,11 +61,11 @@ public class CarteirinhaActivity extends AppCompatActivity {
 
     private void setRecyclerView(){
         recyclerViewVacinas.setHasFixedSize(true);
-        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewVacinas.setLayoutManager(mLayoutManager);
 
-        VacinaAdapter songsAdapter = new VacinaAdapter(vacinas, CarteirinhaActivity.this);
-        songsAdapter.setOnClickListener(new View.OnClickListener() {
+        VacinaAdapter vacinaAdapter = new VacinaAdapter(vacinas, CarteirinhaActivity.this);
+        vacinaAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = recyclerViewVacinas.getChildLayoutPosition(view);
@@ -74,7 +77,7 @@ public class CarteirinhaActivity extends AppCompatActivity {
             }
         });
 
-        recyclerViewVacinas.setAdapter(songsAdapter);
+        recyclerViewVacinas.setAdapter(vacinaAdapter);
         recyclerViewVacinas.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -104,4 +107,5 @@ public class CarteirinhaActivity extends AppCompatActivity {
         toolbar.setTitle("Hi" + name);
         setSupportActionBar(toolbar);
     }
+
 }
