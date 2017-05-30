@@ -1,5 +1,6 @@
 package org.vacine.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,16 +9,16 @@ import java.util.List;
 
 public class Carteirinha {
 
-    private Integer id;
+    private String id;
     private String name;
     private String gender;
     private String birthdayDate;
-    private List<Vacina> vacinas;
+    private List<Vacina> vacinas = new ArrayList<>();
 
     public Carteirinha() {
     }
 
-    public Carteirinha(Integer id, String name, String gender, String birthdayDate, List<Vacina> vacinas) {
+    public Carteirinha(String id, String name, String gender, String birthdayDate, List<Vacina> vacinas) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -29,11 +30,11 @@ public class Carteirinha {
         this.vacinas = vacinas;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,5 +68,16 @@ public class Carteirinha {
 
     public void setVacinas(List<Vacina> vacinas) {
         this.vacinas = vacinas;
+    }
+
+    @Override
+    public String toString() {
+        return "Carteirinha{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthdayDate='" + birthdayDate + '\'' +
+                ", vacinas=" + vacinas +
+                '}';
     }
 }

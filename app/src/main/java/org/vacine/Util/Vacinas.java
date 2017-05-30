@@ -58,13 +58,13 @@ public class Vacinas {
     public static void setVacinasFirebase() {
 
         Carteirinha carteirinha = new Carteirinha(getVacinas());
-        carteirinha.setId(1);
+        carteirinha.setId("Teste1");
         carteirinha.setName("Teste1");
         carteirinha.setBirthdayDate("27/05/2017");
         carteirinha.setGender("Masculino");
         myRef.child(carteirinha.getId().toString()).setValue(carteirinha);
 
-        carteirinha.setId(2);
+        carteirinha.setId("Teste2");
         carteirinha.setName("Teste2");
         carteirinha.setBirthdayDate("05/05/2017");
         carteirinha.setGender("Feminino");

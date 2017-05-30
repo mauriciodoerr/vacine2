@@ -14,44 +14,53 @@ import android.transition.Explode;
 import android.view.View;
 import android.widget.TextView;
 
-import com.firebase.ui.database.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.vacine.Util.Vacinas;
 import org.vacine.adapter.VacinaAdapter;
+import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CarteirinhaActivity extends AppCompatActivity {
 
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference dataRef;
+
     private Toolbar toolbar;
-    private FloatingActionButton facAddSong;
+    private FloatingActionButton facAddVacina;
     private RecyclerView recyclerViewVacinas;
 
-    private List<Vacina> vacinas;
+    private List<Vacina> vacinas = new ArrayList<>();
+    private Carteirinha carteirinha = new Carteirinha();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carteirinha);
 
-//        String name = getIntent().getExtras().getString("name");
-        vacinas = Vacinas.getVacinas();
+        String name = getIntent().getExtras().getString("name");
         Vacinas.setVacinasFirebase();
         findViews();
-//        setToolbar("Mauricio");
-        setRecyclerView();
+        loadVacinasFromFirebase();
         setActions();
     }
 
     private void findViews(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         recyclerViewVacinas = (RecyclerView) findViewById(R.id.recycler_view_vacinas);
-        facAddSong = (FloatingActionButton) findViewById(R.id.fac_add_vacina);
+        facAddVacina = (FloatingActionButton) findViewById(R.id.fac_add_vacina);
     }
 
     private void setActions() {
-        facAddSong.setOnClickListener(new View.OnClickListener() {
+        facAddVacina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createVacina();
@@ -59,20 +68,19 @@ public class CarteirinhaActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView(final Carteirinha carteirinhaTemp){
         recyclerViewVacinas.setHasFixedSize(true);
         StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewVacinas.setLayoutManager(mLayoutManager);
 
-        VacinaAdapter vacinaAdapter = new VacinaAdapter(vacinas, CarteirinhaActivity.this);
+        VacinaAdapter vacinaAdapter = new VacinaAdapter(carteirinhaTemp.getVacinas(), CarteirinhaActivity.this);
         vacinaAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = recyclerViewVacinas.getChildLayoutPosition(view);
-                //ImageView img = (ImageView) view.findViewById(R.id.ivi_cover);
                 TextView viewTransition = (TextView) view.findViewById(R.id.text_view_vacina_name);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("vacina", vacinas.get(position));
+                bundle.putSerializable("vacina", carteirinhaTemp.getVacinas().get(position));
                 goToVacina(viewTransition, bundle);
             }
         });
@@ -106,6 +114,33 @@ public class CarteirinhaActivity extends AppCompatActivity {
     private void setToolbar(String name){
         toolbar.setTitle("Hi" + name);
         setSupportActionBar(toolbar);
+    }
+
+    private void loadVacinasFromFirebase(){
+
+        dataRef = database.getReference("carteirinha");
+
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                for (DataSnapshot obj : children) {
+                    if ("Teste2".equals(obj.getValue(Carteirinha.class).getName())){
+                        carteirinha = obj.getValue(Carteirinha.class);
+                    }
+                }
+
+                setRecyclerView(carteirinha);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

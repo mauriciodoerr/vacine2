@@ -30,7 +30,6 @@ public class Vacina implements Serializable {
     }
 
     public Vacina(String name, String date, String place, String description) {
-        this.id = id;
         this.name = name;
         this.date = date;
         this.place = place;
@@ -69,20 +68,22 @@ public class Vacina implements Serializable {
         this.place = place;
     }
 
-    @Override
-    public String toString() {
-        return "Vacina{" +
-                "name='" + name + '\'' +
-                ", date=" + date +
-                ", place='" + place + '\'' +
-                '}';
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Vacina{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date='" + date + '\'' +
+                ", place='" + place + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

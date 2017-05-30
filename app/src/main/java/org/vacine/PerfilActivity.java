@@ -37,13 +37,20 @@ public class PerfilActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadCarteirinha();
+                loadCarteirinha(setBundle());
             }
         });
     }
 
-    private void loadCarteirinha() {
+    private Bundle setBundle(){
+        Bundle params = new Bundle();
+        params.putString("name", inputName.getText().toString());
+        return params;
+    }
+
+    private void loadCarteirinha(Bundle params) {
         Intent intent = new Intent(PerfilActivity.this, CarteirinhaActivity.class);
+        intent.putExtras(params);
         startActivity(intent);
         finish();
     }
