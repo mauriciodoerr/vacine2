@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,7 +27,6 @@ import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CarteirinhaActivity extends AppCompatActivity {
@@ -41,16 +41,23 @@ public class CarteirinhaActivity extends AppCompatActivity {
     private List<Vacina> vacinas = new ArrayList<>();
     private Carteirinha carteirinha = new Carteirinha();
 
+    private String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carteirinha);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String name = getIntent().getExtras().getString("name");
-        Vacinas.setVacinasFirebase();
+        name = getIntent().getExtras().getString("name");
         findViews();
+        //setToolbar();
         loadVacinasFromFirebase();
         setActions();
+    }
+
+    private void createCarteirinha() {
+        Vacinas.setVacinasFirebase(name);
     }
 
     private void findViews(){
@@ -72,6 +79,10 @@ public class CarteirinhaActivity extends AppCompatActivity {
         recyclerViewVacinas.setHasFixedSize(true);
         StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewVacinas.setLayoutManager(mLayoutManager);
+
+        if (carteirinhaTemp.getVacinas().isEmpty()) {
+            createCarteirinha();
+        }
 
         VacinaAdapter vacinaAdapter = new VacinaAdapter(carteirinhaTemp.getVacinas(), CarteirinhaActivity.this);
         vacinaAdapter.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +122,7 @@ public class CarteirinhaActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setToolbar(String name){
+    private void setToolbar(){
         toolbar.setTitle("Hi" + name);
         setSupportActionBar(toolbar);
     }
@@ -127,7 +138,7 @@ public class CarteirinhaActivity extends AppCompatActivity {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
 
                 for (DataSnapshot obj : children) {
-                    if ("Teste2".equals(obj.getValue(Carteirinha.class).getName())){
+                    if (name.equals(obj.getValue(Carteirinha.class).getName())){
                         carteirinha = obj.getValue(Carteirinha.class);
                     }
                 }
@@ -141,6 +152,16 @@ public class CarteirinhaActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

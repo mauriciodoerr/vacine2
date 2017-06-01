@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import org.vacine.model.Carteirinha;
@@ -15,6 +16,7 @@ import org.vacine.model.Vacina;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,20 +57,14 @@ public class Vacinas {
         return vacinas;
     }
 
-    public static void setVacinasFirebase() {
+    public static void setVacinasFirebase(String name) {
 
         Carteirinha carteirinha = new Carteirinha(getVacinas());
-        carteirinha.setId("Teste1");
-        carteirinha.setName("Teste1");
+        carteirinha.setId(name + new Date().getTime());
+        carteirinha.setName(name);
         carteirinha.setBirthdayDate("27/05/2017");
         carteirinha.setGender("Masculino");
-        myRef.child(carteirinha.getId().toString()).setValue(carteirinha);
-
-        carteirinha.setId("Teste2");
-        carteirinha.setName("Teste2");
-        carteirinha.setBirthdayDate("05/05/2017");
-        carteirinha.setGender("Feminino");
-        myRef.child(carteirinha.getId().toString()).setValue(carteirinha);
+        myRef.child(carteirinha.getId()).setValue(carteirinha);
 
     }
 

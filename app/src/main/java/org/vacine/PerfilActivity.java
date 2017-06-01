@@ -45,6 +45,7 @@ public class PerfilActivity extends AppCompatActivity {
     private Bundle setBundle(){
         Bundle params = new Bundle();
         params.putString("name", inputName.getText().toString());
+        params.putBoolean("createProfile", true);
         return params;
     }
 
@@ -52,7 +53,6 @@ public class PerfilActivity extends AppCompatActivity {
         Intent intent = new Intent(PerfilActivity.this, CarteirinhaActivity.class);
         intent.putExtras(params);
         startActivity(intent);
-        finish();
     }
 
 }
