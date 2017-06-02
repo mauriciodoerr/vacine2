@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,22 +25,19 @@ import org.vacine.adapter.VacinaAdapter;
 import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CarteirinhaActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference dataRef;
 
-    private Toolbar toolbar;
     private FloatingActionButton facAddVacina;
     private RecyclerView recyclerViewVacinas;
 
-    private List<Vacina> vacinas = new ArrayList<>();
     private Carteirinha carteirinha = new Carteirinha();
 
     private String name;
+    private String gender;
+    private String birthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +46,15 @@ public class CarteirinhaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         name = getIntent().getExtras().getString("name");
+        gender = getIntent().getExtras().getString("gender");
+        birthday = getIntent().getExtras().getString("birthday");
         findViews();
-        //setToolbar();
         loadVacinasFromFirebase();
         setActions();
     }
 
     private void createCarteirinha() {
-        Vacinas.setVacinasFirebase(name);
+        Vacinas.setVacinasFirebase(name, gender, birthday);
     }
 
     private void findViews(){

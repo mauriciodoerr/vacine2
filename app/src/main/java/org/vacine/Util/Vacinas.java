@@ -1,26 +1,17 @@
 package org.vacine.Util;
 
-import android.util.Log;
-
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Util created to mock a Carteirinha
+ * Util created to populate Carteirinha for the first time the user access the system
  *
  * @author Mauricio
  * @since 21/05/2017
@@ -30,10 +21,10 @@ import java.util.List;
 public class Vacinas {
 
     private static final String TAG = "Vacinas";
-    static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    static DatabaseReference myRef = database.getReference("carteirinha");
+    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static DatabaseReference myRef = database.getReference("carteirinha");
 
-    public static List<Vacina> getVacinas() {
+    private static List<Vacina> getVacinas() {
         List<Vacina> vacinas = new ArrayList<>();
 
         vacinas.add(new Vacina(1, "Vacina 1", "10/02/2017", "Curitiba", "Descricao 1"));
@@ -64,6 +55,17 @@ public class Vacinas {
         carteirinha.setName(name);
         carteirinha.setBirthdayDate("27/05/2017");
         carteirinha.setGender("Masculino");
+        myRef.child(carteirinha.getId()).setValue(carteirinha);
+
+    }
+
+    public static void setVacinasFirebase(String name, String gender, String birthday) {
+
+        Carteirinha carteirinha = new Carteirinha(getVacinas());
+        carteirinha.setId(name + new Date().getTime());
+        carteirinha.setName(name);
+        carteirinha.setBirthdayDate(birthday);
+        carteirinha.setGender(gender);
         myRef.child(carteirinha.getId()).setValue(carteirinha);
 
     }

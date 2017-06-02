@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class PerfilActivity extends AppCompatActivity {
 
-    private View profileContent;
     private TextInputEditText inputName;
+    private RadioGroup genderGroup;
     private RadioButton genderSelection;
     private TextInputEditText inputBirthdayDate;
     private Button btnAdd;
@@ -26,9 +27,11 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        profileContent = findViewById(R.id.profile_content);
         inputName = (TextInputEditText) findViewById(R.id.txt_input_name);
-        genderSelection = (RadioButton) findViewById(R.id.radio_gender_selection);
+        genderGroup = (RadioGroup) findViewById(R.id.radio_group_gender_selection);
+
+        int index = genderGroup.getCheckedRadioButtonId();
+        genderSelection = (RadioButton) findViewById(index);
         inputBirthdayDate = (TextInputEditText) findViewById(R.id.txt_input_birthday_date);
         btnAdd = (Button) findViewById(R.id.btn_add);
     }
@@ -45,6 +48,13 @@ public class PerfilActivity extends AppCompatActivity {
     private Bundle setBundle(){
         Bundle params = new Bundle();
         params.putString("name", inputName.getText().toString());
+
+        /** TODO
+         * Arrumar a captura do genero da tela de perfil
+         */
+        params.putString("gender", genderSelection.getText().toString());
+
+        params.putString("birthday", inputBirthdayDate.getText().toString());
         return params;
     }
 
