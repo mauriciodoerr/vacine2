@@ -61,7 +61,6 @@ public class CarteirinhaActivity extends AppCompatActivity {
     }
 
     private void findViews(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         recyclerViewVacinas = (RecyclerView) findViewById(R.id.recycler_view_vacinas);
         facAddVacina = (FloatingActionButton) findViewById(R.id.fac_add_vacina);
     }
@@ -75,12 +74,12 @@ public class CarteirinhaActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView(final Carteirinha carteirinhaTemp){
+    private void setRecyclerView(Carteirinha carteirinhaTemp){
         recyclerViewVacinas.setHasFixedSize(true);
         StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewVacinas.setLayoutManager(mLayoutManager);
 
-        if (carteirinhaTemp.getVacinas().isEmpty()) {
+        if (carteirinha.getVacinas().isEmpty()) {
             createCarteirinha();
         }
 
@@ -91,7 +90,8 @@ public class CarteirinhaActivity extends AppCompatActivity {
                 int position = recyclerViewVacinas.getChildLayoutPosition(view);
                 TextView viewTransition = (TextView) view.findViewById(R.id.text_view_vacina_name);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("vacina", carteirinhaTemp.getVacinas().get(position));
+                bundle.putSerializable("vacina", carteirinha.getVacinas().get(position));
+                bundle.putSerializable("carteirinha", carteirinha);
                 goToVacina(viewTransition, bundle);
             }
         });
@@ -119,12 +119,11 @@ public class CarteirinhaActivity extends AppCompatActivity {
 
     private void createVacina(){
         Intent intent = new Intent(CarteirinhaActivity.this, VacinaActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("vacina", new Vacina());
+        bundle.putSerializable("carteirinha", carteirinha);
+        intent.putExtra("extra", bundle);
         startActivity(intent);
-    }
-
-    private void setToolbar(){
-        toolbar.setTitle("Hi" + name);
-        setSupportActionBar(toolbar);
     }
 
     private void loadVacinasFromFirebase(){

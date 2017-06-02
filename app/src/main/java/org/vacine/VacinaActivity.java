@@ -1,8 +1,8 @@
 package org.vacine;
 
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,21 +16,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class VacinaActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference dataRef;
+    private DatabaseReference dataRef = database.getReference("carteirinha");
 
     private EditText txtEditVacinaName;
     private EditText txtEditDate;
     private EditText txtEditPlace;
     private TextView txtEditDescription;
     private Button btnAddVacina;
+    private Button btnDelVacina;
 
-    private String id;
+    private Carteirinha carteirinha;
+    private Vacina vacina;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,8 @@ public class VacinaActivity extends AppCompatActivity {
 
         findViews();
         if (getIntent().getBundleExtra("extra") != null) {
-            Vacina vacina = (Vacina) getIntent().getBundleExtra("extra").getSerializable("vacina");
+            vacina = (Vacina) getIntent().getBundleExtra("extra").getSerializable("vacina");
+            carteirinha = (Carteirinha) getIntent().getBundleExtra("extra").getSerializable("carteirinha");
             setInfo(vacina);
             validateTransitions(txtEditVacinaName);
         }
@@ -53,6 +53,7 @@ public class VacinaActivity extends AppCompatActivity {
         txtEditPlace = (EditText) findViewById(R.id.edt_edit_vacina_place);
         txtEditDescription = (TextView) findViewById(R.id.txt_view_edit_vacina_descricao);
         btnAddVacina = (Button) findViewById(R.id.btn_add_vacina);
+        btnDelVacina = (Button) findViewById(R.id.btn_del_vacina);
     }
 
     private void setInfo(Vacina vacina) {
@@ -68,15 +69,63 @@ public class VacinaActivity extends AppCompatActivity {
         }
     }
 
-    private void setActions(){
-        /** TODO : Implement to get values from screen and pass it to firebase
-         *
-          */
+    private Vacina populateVacina(){
+        Vacina vacinaTemp = new Vacina();
+
+        if (vacina.getId() == null) {
+            vacinaTemp.setId(carteirinha.getVacinas().size()+1);
+        } else {
+            vacinaTemp.setId(vacina.getId());
+        }
+        vacinaTemp.setName(txtEditVacinaName.getText().toString());
+        vacinaTemp.setDate(txtEditDate.getText().toString());
+        vacinaTemp.setPlace(txtEditPlace.getText().toString());
+        vacinaTemp.setDescription("");
+        return vacinaTemp;
+    }
+
+    private void setActions() {
+
         btnAddVacina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
+                if (vacina.getId() == null){
+                    carteirinha.getVacinas().add(populateVacina());
+                } else {
+
+                    for (Vacina vacinaTemp : carteirinha.getVacinas()){
+                        int index = carteirinha.getVacinas().indexOf(vacinaTemp);
+                        if (vacinaTemp.getId().intValue() == vacina.getId().intValue()){
+                            carteirinha.getVacinas().set(index, populateVacina());
+                            break;
+                        }
+
+                    }
+
+                }
+
+                dataRef.child(carteirinha.getId()).setValue(carteirinha);
+                finish();
+            }
+        });
+
+        btnDelVacina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                for (Vacina vacinaTemp : carteirinha.getVacinas()){
+
+                    if (vacinaTemp.getId().intValue() == vacina.getId().intValue()){
+                        carteirinha.getVacinas().remove(vacinaTemp);
+                        break;
+                    }
+
+                }
+
+                dataRef.child(carteirinha.getId()).setValue(carteirinha);
+                Toast.makeText(getApplicationContext(), "Vacina: " + vacina.getName() + " removed!", Toast.LENGTH_SHORT).show();
+                finish();
 
             }
         });

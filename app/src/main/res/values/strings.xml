@@ -14,4 +14,5 @@
     <string name="vacina_place">Local</string>
     <string name="vacina_descricao">Descrição</string>
     <string name="gravar">Gravar</string>
+    <string name="apagar">Apagar</string>
 </resources>

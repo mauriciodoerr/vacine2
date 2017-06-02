@@ -1,5 +1,6 @@
 package org.vacine.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by mauricio on 27/05/17.
  */
 
-public class Carteirinha {
+public class Carteirinha implements Serializable {
 
     private String id;
     private String name;

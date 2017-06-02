@@ -45,7 +45,6 @@ public class PerfilActivity extends AppCompatActivity {
     private Bundle setBundle(){
         Bundle params = new Bundle();
         params.putString("name", inputName.getText().toString());
-        params.putBoolean("createProfile", true);
         return params;
     }
 
