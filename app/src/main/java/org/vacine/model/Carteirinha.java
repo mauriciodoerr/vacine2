@@ -5,26 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mauricio on 27/05/17.
+ * Carteirinha holds all the customer information
+ *
+ * @author Mauricio
+ * @since 27/05/2017
+ * @version 1.0
  */
 
 public class Carteirinha implements Serializable {
 
     private String id;
     private String name;
-    private String gender;
-    private String birthdayDate;
     private List<Vacina> vacinas = new ArrayList<>();
 
     public Carteirinha() {
-    }
-
-    public Carteirinha(String id, String name, String gender, String birthdayDate, List<Vacina> vacinas) {
-        this.id = id;
-        this.name = name;
-        this.gender = gender;
-        this.birthdayDate = birthdayDate;
-        this.vacinas = vacinas;
     }
 
     public Carteirinha(List<Vacina> vacinas) {
@@ -47,22 +41,6 @@ public class Carteirinha implements Serializable {
         this.name = name;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBirthdayDate() {
-        return birthdayDate;
-    }
-
-    public void setBirthdayDate(String birthdayDate) {
-        this.birthdayDate = birthdayDate;
-    }
-
     public List<Vacina> getVacinas() {
         return vacinas;
     }
@@ -76,8 +54,6 @@ public class Carteirinha implements Serializable {
         return "Carteirinha{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", gender='" + gender + '\'' +
-                ", birthdayDate='" + birthdayDate + '\'' +
                 ", vacinas=" + vacinas +
                 '}';
     }

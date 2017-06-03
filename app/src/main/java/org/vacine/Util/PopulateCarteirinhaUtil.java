@@ -1,5 +1,7 @@
 package org.vacine.Util;
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,12 +20,16 @@ import java.util.List;
  * @version 1.0
  */
 
-public class Vacinas {
+public abstract class PopulateCarteirinhaUtil {
 
-    private static final String TAG = "Vacinas";
+    private static final String TAG = "PopulateCarteirinhaUtil";
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static DatabaseReference myRef = database.getReference("carteirinha");
 
+    /**
+     * Populate carteirinha with a list of default vacinas
+     * @return List with default vacinas
+     */
     private static List<Vacina> getVacinas() {
         List<Vacina> vacinas = new ArrayList<>();
 
@@ -48,25 +54,18 @@ public class Vacinas {
         return vacinas;
     }
 
+    /**
+     * Create carteirinha and setup on Firebase with default vacinas
+     * @param name username from PerfilActivity
+     */
     public static void setVacinasFirebase(String name) {
 
         Carteirinha carteirinha = new Carteirinha(getVacinas());
         carteirinha.setId(name + new Date().getTime());
         carteirinha.setName(name);
-        carteirinha.setBirthdayDate("27/05/2017");
-        carteirinha.setGender("Masculino");
         myRef.child(carteirinha.getId()).setValue(carteirinha);
 
-    }
-
-    public static void setVacinasFirebase(String name, String gender, String birthday) {
-
-        Carteirinha carteirinha = new Carteirinha(getVacinas());
-        carteirinha.setId(name + new Date().getTime());
-        carteirinha.setName(name);
-        carteirinha.setBirthdayDate(birthday);
-        carteirinha.setGender(gender);
-        myRef.child(carteirinha.getId()).setValue(carteirinha);
+        Log.d(TAG, carteirinha.getId() + " criada com sucesso.");
 
     }
 

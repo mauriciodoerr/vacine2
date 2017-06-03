@@ -20,15 +20,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.vacine.Util.Vacinas;
+import org.vacine.Util.PopulateCarteirinhaUtil;
 import org.vacine.adapter.VacinaAdapter;
 import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
 
+/**
+ * Carteirinha
+ *
+ * @author Mauricio
+ * @since 18/05/2017
+ * @version 1.0
+ */
 public class CarteirinhaActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference dataRef;
+    private DatabaseReference dataRef = database.getReference("carteirinha");;
 
     private FloatingActionButton facAddVacina;
     private RecyclerView recyclerViewVacinas;
@@ -36,32 +43,42 @@ public class CarteirinhaActivity extends AppCompatActivity {
     private Carteirinha carteirinha = new Carteirinha();
 
     private String name;
-    private String gender;
-    private String birthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carteirinha);
+
+        // Setup back button upon left screen corner
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Get the name which has been received via Bundle from PerfilActivity
         name = getIntent().getExtras().getString("name");
-        gender = getIntent().getExtras().getString("gender");
-        birthday = getIntent().getExtras().getString("birthday");
+
         findViews();
         loadVacinasFromFirebase();
         setActions();
     }
 
+    /**
+     * When the user is accessing the system for the first time, this method will load the default vacinas into Firebase
+     */
     private void createCarteirinha() {
-        Vacinas.setVacinasFirebase(name, gender, birthday);
+        PopulateCarteirinhaUtil.setVacinasFirebase(name);
     }
 
+    /**
+     * Map the layout into variables
+     */
     private void findViews(){
         recyclerViewVacinas = (RecyclerView) findViewById(R.id.recycler_view_vacinas);
         facAddVacina = (FloatingActionButton) findViewById(R.id.fac_add_vacina);
     }
 
+    /**
+     * Setup listeners for buttons in layout
+     * When clicking the "+" button on bottom right corner, it will open up details screen to save a new Vacina
+     */
     private void setActions() {
         facAddVacina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,24 +88,43 @@ public class CarteirinhaActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Setup RecyclerView with Carteirinha information
+     * @param carteirinhaTemp populated object received to load information on screen
+     */
     private void setRecyclerView(Carteirinha carteirinhaTemp){
         recyclerViewVacinas.setHasFixedSize(true);
-        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
+        // Create layout with vertical orientation and maximum of three items per row
+        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+
+        // Setup layout into RecyclerView
         recyclerViewVacinas.setLayoutManager(mLayoutManager);
 
+        // Validate if carteirinha loaded from Firebase has no vacinas, if yes, it will create and load the default vacinas list
         if (carteirinha.getVacinas().isEmpty()) {
             createCarteirinha();
         }
 
-        VacinaAdapter vacinaAdapter = new VacinaAdapter(carteirinhaTemp.getVacinas(), CarteirinhaActivity.this);
+        // Setup adapter passing the list of vacinas
+        VacinaAdapter vacinaAdapter = new VacinaAdapter(carteirinhaTemp.getVacinas());
+
+        // Every list item will be clickable and load up a details screen
         vacinaAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Get the position of the item into the RecyclerView list
                 int position = recyclerViewVacinas.getChildLayoutPosition(view);
+
+                // Get the vacina name to animate when loading details
                 TextView viewTransition = (TextView) view.findViewById(R.id.text_view_vacina_name);
+
+                // Setup Bundle with vacina and the whole user Carteirinha
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("vacina", carteirinha.getVacinas().get(position));
                 bundle.putSerializable("carteirinha", carteirinha);
+
+                // Load details screen with animation and passing the vacina and carteirinha details
                 goToVacina(viewTransition, bundle);
             }
         });
@@ -97,11 +133,14 @@ public class CarteirinhaActivity extends AppCompatActivity {
         recyclerViewVacinas.setItemAnimator(new DefaultItemAnimator());
     }
 
+    /**
+     * Go to Vacina details
+     * @param view from which view it will animate when loading details screen
+     * @param bundle information from vacina and carteirinha
+     */
     private void goToVacina(View view, Bundle bundle){
         Intent intent = new Intent(CarteirinhaActivity.this, VacinaActivity.class);
-        if (bundle != null) {
             intent.putExtra("extra", bundle);
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setExitTransition(new Explode());
@@ -114,6 +153,9 @@ public class CarteirinhaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Open up vacina details with Bundle setup with carteirinha and a new Vacina with no parameters filled up
+     */
     private void createVacina(){
         Intent intent = new Intent(CarteirinhaActivity.this, VacinaActivity.class);
         Bundle bundle = new Bundle();
@@ -123,9 +165,10 @@ public class CarteirinhaActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Load Carteirinha of the user from Firebase
+     */
     private void loadVacinasFromFirebase(){
-
-        dataRef = database.getReference("carteirinha");
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -150,6 +193,9 @@ public class CarteirinhaActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Go back to previous screen when clicking into back button on top left corner
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
