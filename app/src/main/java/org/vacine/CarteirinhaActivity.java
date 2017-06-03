@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.vacine.Util.Vacinas;
+import org.vacine.Util.PopulateCarteirinhaUtil;
 import org.vacine.adapter.VacinaAdapter;
 import org.vacine.model.Carteirinha;
 import org.vacine.model.Vacina;
@@ -28,7 +28,7 @@ import org.vacine.model.Vacina;
 public class CarteirinhaActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference dataRef;
+    private DatabaseReference dataRef = database.getReference("carteirinha");;
 
     private FloatingActionButton facAddVacina;
     private RecyclerView recyclerViewVacinas;
@@ -36,8 +36,6 @@ public class CarteirinhaActivity extends AppCompatActivity {
     private Carteirinha carteirinha = new Carteirinha();
 
     private String name;
-    private String gender;
-    private String birthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +44,13 @@ public class CarteirinhaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         name = getIntent().getExtras().getString("name");
-        gender = getIntent().getExtras().getString("gender");
-        birthday = getIntent().getExtras().getString("birthday");
         findViews();
         loadVacinasFromFirebase();
         setActions();
     }
 
     private void createCarteirinha() {
-        Vacinas.setVacinasFirebase(name, gender, birthday);
+        PopulateCarteirinhaUtil.setVacinasFirebase(name);
     }
 
     private void findViews(){
@@ -73,7 +69,7 @@ public class CarteirinhaActivity extends AppCompatActivity {
 
     private void setRecyclerView(Carteirinha carteirinhaTemp){
         recyclerViewVacinas.setHasFixedSize(true);
-        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewVacinas.setLayoutManager(mLayoutManager);
 
         if (carteirinha.getVacinas().isEmpty()) {
@@ -124,8 +120,6 @@ public class CarteirinhaActivity extends AppCompatActivity {
     }
 
     private void loadVacinasFromFirebase(){
-
-        dataRef = database.getReference("carteirinha");
 
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override

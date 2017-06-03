@@ -31,6 +31,8 @@ public class VacinaActivity extends AppCompatActivity {
     private Carteirinha carteirinha;
     private Vacina vacina;
 
+    private String returnMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,23 +92,29 @@ public class VacinaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (vacina.getId() == null){
-                    carteirinha.getVacinas().add(populateVacina());
-                } else {
+                if (validateForm()){
+                    if (vacina.getId() == null){
+                        carteirinha.getVacinas().add(populateVacina());
+                        returnMessage = "added";
+                    } else {
 
-                    for (Vacina vacinaTemp : carteirinha.getVacinas()){
-                        int index = carteirinha.getVacinas().indexOf(vacinaTemp);
-                        if (vacinaTemp.getId().intValue() == vacina.getId().intValue()){
-                            carteirinha.getVacinas().set(index, populateVacina());
-                            break;
+                        for (Vacina vacinaTemp : carteirinha.getVacinas()){
+                            int index = carteirinha.getVacinas().indexOf(vacinaTemp);
+                            if (vacinaTemp.getId().intValue() == vacina.getId().intValue()){
+                                carteirinha.getVacinas().set(index, populateVacina());
+                                returnMessage = "updated";
+                                break;
+                            }
+
                         }
 
                     }
 
+                    dataRef.child(carteirinha.getId()).setValue(carteirinha);
+                    Toast.makeText(getApplicationContext(), "Vacina: " + populateVacina().getName() + " " + returnMessage + "!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
-                dataRef.child(carteirinha.getId()).setValue(carteirinha);
-                finish();
             }
         });
 
@@ -114,18 +122,24 @@ public class VacinaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                for (Vacina vacinaTemp : carteirinha.getVacinas()){
+                if (vacina.getId() == null){
+                    Toast.makeText(getApplicationContext(), "Não foi possível remover esta vacina!", Toast.LENGTH_SHORT).show();
+                } else {
 
-                    if (vacinaTemp.getId().intValue() == vacina.getId().intValue()){
-                        carteirinha.getVacinas().remove(vacinaTemp);
-                        break;
+                    for (Vacina vacinaTemp : carteirinha.getVacinas()) {
+
+                        if (vacinaTemp.getId().intValue() == vacina.getId().intValue()) {
+                            carteirinha.getVacinas().remove(vacinaTemp);
+                            break;
+                        }
+
                     }
 
-                }
+                    dataRef.child(carteirinha.getId()).setValue(carteirinha);
+                    Toast.makeText(getApplicationContext(), "Vacina: " + vacina.getName() + " removed!", Toast.LENGTH_SHORT).show();
+                    finish();
 
-                dataRef.child(carteirinha.getId()).setValue(carteirinha);
-                Toast.makeText(getApplicationContext(), "Vacina: " + vacina.getName() + " removed!", Toast.LENGTH_SHORT).show();
-                finish();
+                }
 
             }
         });
@@ -139,5 +153,22 @@ public class VacinaActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Validates if all edit text are filled up, otherwise prints a friendly error message on screen.
+     * @return true if all edit text are filled up.
+     */
+    private boolean validateForm(){
+        if (txtEditVacinaName.getText().toString().length() == 0){
+            txtEditVacinaName.setError("Qual o nome da vacina?");
+        } else if (txtEditDate.getText().toString().length() == 0) {
+            txtEditDate.setError("Qual a data que você tomou?");
+        } else if (txtEditPlace.getText().toString().length() == 0){
+            txtEditPlace.setError("Lembra do local onde tomou?");
+        } else {
+            return true;
+        }
+        return false;
     }
 }
