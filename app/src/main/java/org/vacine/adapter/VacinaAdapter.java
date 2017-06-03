@@ -1,14 +1,9 @@
 package org.vacine.adapter;
 
-import android.content.Context;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.google.firebase.database.DatabaseReference;
 
 import org.vacine.R;
 import org.vacine.model.Vacina;
@@ -16,8 +11,11 @@ import org.vacine.model.Vacina;
 import java.util.List;
 
 /**
- * Created by alvardev on 18/05/17.
- * Adapter for RecyclerView
+ * Adapter to receive information from Carteirinha and fill up each ViewHolder with vacina information
+ *
+ * @author Mauricio
+ * @since 18/05/2017
+ * @version 1.0
  */
 
 public class VacinaAdapter extends RecyclerView.Adapter<VacinaViewHolder>
@@ -25,11 +23,13 @@ public class VacinaAdapter extends RecyclerView.Adapter<VacinaViewHolder>
 
     private List<Vacina> mData;
     private View.OnClickListener listener;
-    private Context mContext;
 
-    public VacinaAdapter(List<Vacina> myData, Context context) {
+    /**
+     * Receives a list of Vacinas
+     * @param myData list of Vacinas
+     */
+    public VacinaAdapter(List<Vacina> myData) {
         this.mData = myData;
-        this.mContext = context;
     }
 
     @Override
@@ -41,6 +41,7 @@ public class VacinaAdapter extends RecyclerView.Adapter<VacinaViewHolder>
 
     @Override
     public void onBindViewHolder(VacinaViewHolder holder, int position) {
+        // Populate layout views with Vacina information
         holder.textViewName.setText(mData.get(position).getName());
         holder.textViewDate.setText(mData.get(position).getDate());
         holder.textViewPlace.setText(mData.get(position).getPlace());

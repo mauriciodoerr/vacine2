@@ -4,8 +4,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="org.vacine.VacinaActivity">
-
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/my_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -78,6 +84,12 @@
 
     </LinearLayout>
 
+</ScrollView>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/my_scrollview2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -91,13 +103,24 @@
             android:text="@string/vacina_descricao"
             android:textSize="16sp"/>
 
-        <TextView
-            android:layout_margin="10dp"
+        <EditText
+            android:inputType="textMultiLine"
+            android:lines="10"
+            android:minLines="10"
+            android:gravity="start"
+            android:maxLines="10"
+            android:scrollbars="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
             android:id="@+id/txt_view_edit_vacina_descricao"
+            style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
