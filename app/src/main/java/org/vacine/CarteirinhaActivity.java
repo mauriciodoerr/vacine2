@@ -10,10 +10,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.transition.Explode;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,17 +45,16 @@ public class CarteirinhaActivity extends AppCompatActivity {
     private Carteirinha carteirinha = new Carteirinha();
 
     private String name;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carteirinha);
 
-        // Setup back button upon left screen corner
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Get the name which has been received via Bundle from PerfilActivity
+        // Get the id and name which has been received via Bundle from PerfilActivity
         name = getIntent().getExtras().getString("name");
+        id = getIntent().getExtras().getString("id");
 
         findViews();
         loadVacinasFromFirebase();
@@ -64,7 +65,7 @@ public class CarteirinhaActivity extends AppCompatActivity {
      * When the user is accessing the system for the first time, this method will load the default vacinas into Firebase
      */
     private void createCarteirinha() {
-        PopulateCarteirinhaUtil.setVacinasFirebase(name);
+        PopulateCarteirinhaUtil.setVacinasFirebase(id, name);
     }
 
     /**
@@ -194,15 +195,33 @@ public class CarteirinhaActivity extends AppCompatActivity {
     }
 
     /**
+     * Create a menu on top right with logout option
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    /**
      * Go back to previous screen when clicking into back button on top left corner
      */
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.fb_logout) {
+            LoginManager.getInstance().logOut();
+            startActivity(new Intent(CarteirinhaActivity.this, PerfilActivity.class));
+            finish();
+            return true;
+        }
+
         if (id == android.R.id.home) {
             finish();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

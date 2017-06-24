@@ -58,10 +58,10 @@ public abstract class PopulateCarteirinhaUtil {
      * Create carteirinha and setup on Firebase with default vacinas
      * @param name username from PerfilActivity
      */
-    public static void setVacinasFirebase(String name) {
+    public static void setVacinasFirebase(String id, String name) {
 
         Carteirinha carteirinha = new Carteirinha(getVacinas());
-        carteirinha.setId(name + new Date().getTime());
+        carteirinha.setId(id);
         carteirinha.setName(name);
         myRef.child(carteirinha.getId()).setValue(carteirinha);
 

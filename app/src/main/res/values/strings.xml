@@ -1,4 +1,8 @@
 <resources>
+    <!-- Facebook Login -->
+    <string name="facebook_app_id">973926202744515</string>
+    <string name="fb_login_protocol_scheme">fb973926202744515</string>
+
     <string name="app_name">Vacine</string>
     <string name="create_profile">Criar Perfil</string>
     <string name="name">Nome</string>
